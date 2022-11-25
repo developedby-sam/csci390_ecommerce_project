@@ -24,6 +24,12 @@ const Header = ({ hidden }) => {
         >
           SHOP
         </Link>
+        <Link
+          className={`${pathname == "/register" ? "active" : ""} option`}
+          to="register"
+        >
+          REGISTER
+        </Link>
         <CartIcon />
       </div>
       {hidden ? null : <CartDropdown />}
