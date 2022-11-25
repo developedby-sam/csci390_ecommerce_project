@@ -25,10 +25,10 @@ const Header = ({ hidden }) => {
           SHOP
         </Link>
         <Link
-          className={`${pathname == "/register" ? "active" : ""} option`}
-          to="register"
+          className={`${pathname == "/signin" ? "active" : ""} option`}
+          to="signin"
         >
-          REGISTER
+          SIGN IN
         </Link>
         <CartIcon />
       </div>

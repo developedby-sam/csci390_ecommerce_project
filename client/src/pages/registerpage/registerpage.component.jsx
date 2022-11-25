@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./register.styles.scss";
+import "./registerpage.styles.scss";
 
 // Components
 import FormInput from "../../components/form-input/form-input.component";
