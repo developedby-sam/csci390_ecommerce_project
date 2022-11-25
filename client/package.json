@@ -1,0 +1,26 @@
+{
+  "name": "everest-walk",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.8",
+    "react-router-dom": "^6.3.0",
+    "redux": "^4.1.2",
+    "redux-logger": "^3.0.6",
+    "reselect": "^4.1.5",
+    "sass": "^1.49.11"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^1.0.7",
+    "prettier": "2.6.2",
+    "vite": "^2.9.0",
+    "vite-plugin-react-svg": "^0.2.0"
+  }
+}
