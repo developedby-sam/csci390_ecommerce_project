@@ -61,31 +61,30 @@ let UserModel = mongoose.model("user", userSchema);
 app.post('/register', async (req, res) => {
     const inputUserInfo = req.body;
     console.log(inputUserInfo);
-    console.log("Yes")
     
-    // let users = await UserModel.find();
-    // const userWithSameEmail = users.filter( user => user.email === inputUserInfo.email).length;
-    // if (userWithSameEmail) {
-    //     res.status(500).send(`User with email: ${inputUserInfo.email} already exits.`);
-    // }
-    // else {
-    //     try {
-    //         console.log('User Info:', inputUserInfo);
-    //         let user = new UserModel(inputUserInfo);
-    //         user = user.save();
-    //         res.status(200).json({
-    //             status:400,
-    //             data:user,
-    //         });
+    let users = await UserModel.find();
+    const userWithSameEmail = users.filter( user => user.email === inputUserInfo.email).length;
+    if (userWithSameEmail) {
+        res.status(500).send(`User with email: ${inputUserInfo.email} already exits.`);
+    }
+    else {
+        try {
+            console.log('User Info:', inputUserInfo);
+            let user = new UserModel(inputUserInfo);
+            user = user.save();
+            res.status(200).json({
+                status:400,
+                data:user,
+            });
 
-    //     }
-    //     catch {
-    //         res.status(400).json({
-    //             status:400,
-    //             data:user,
-    //         });
-    //     }
-    // }
+        }
+        catch {
+            res.status(400).json({
+                status:400,
+                data:user,
+            });
+        }
+    }
          
 });
 
