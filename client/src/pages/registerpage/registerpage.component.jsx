@@ -1,46 +1,51 @@
-import React from "react";
-import {useState} from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./registerpage.styles.scss";
 
 // Components
 import FormInput from "../../components/form-input/form-input.component";
 import CustomButton from "../../components/custom-button/custom-button.component";
 
-const Registerpage = () => {
+const Registerpage = ({ setUser }) => {
+  const navigate = useNavigate();
 
+  // Storing user data in state to keep track of if
+  // user is logged in or not and to save data in the backend
   const [userData, setUserData] = useState({
     name: "",
-    email:"",
-    phoneNumber:"",
-    password:""
+    email: "",
+    phoneNumber: "",
+    password: "",
   });
+  const [userExist, setUserExist] = useState(false);
 
+  // Handles submission of the form data to the backend
+  // COllectes user name and email and reset password to
+  // prevents privacy issues
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Clicked");
+
     const response = await fetch("http://localhost:8000/register", {
       method: "POST",
-      body: JSON.stringify({
+      body: JSON.stringify(userData),
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (response.status === 200) {
+      setUserExist(false);
+      setUser({
         name: userData.name,
         email: userData.email,
-        phoneNumber: parseInt(userData.phoneNumber),
-        password: userData.password
-      }),
-      headers: {'Content-Type': 'application/json' }
-    })
-    // To handle the response from the mongodb database
-    // .then(
-    //   (res) => {
-    //     if (res.status == 500){
-    //       alert("Already exists with the aboe entered email.")
-    //     }
-    //   }
-    // );
-    console.log(event.target)
-  }
-  
+      });
+      navigate("/");
+    } else if (response.status === 403) {
+      setUserExist(true);
+    }
+  };
+
+  // Handles and update userform data
   const handleInputChange = (event) => {
-    const {name, value} = event.target;
+    const { name, value } = event.target;
     setUserData({
       ...userData,
       [name]: value,
@@ -54,11 +59,46 @@ const Registerpage = () => {
         <p className="sub-heading">
           Create your account. It's free and only takes a minute.
         </p>
+        {userExist ? (
+          <div className="duplicate">
+            Email already exists! Try using different email
+          </div>
+        ) : (
+          ""
+        )}
         <div className="form-data">
-          <FormInput name="name" type="text"  placeholder="Full Name" onChange={handleInputChange} value={userData.name} required />
-          <FormInput name="email" type="email" placeholder="Email" onChange={handleInputChange} value={userData.email} required />
-          <FormInput name="phoneNumber" type="number" placeholder="Contact Number" onChange={handleInputChange} value={userData.phoneNumber} required />
-          <FormInput name="password" type="password" placeholder="Password" onChange={handleInputChange} value={userData.password} required />
+          <FormInput
+            name="name"
+            type="text"
+            placeholder="Full Name"
+            onChange={handleInputChange}
+            value={userData.name}
+            required
+          />
+          <FormInput
+            name="email"
+            type="email"
+            placeholder="Email"
+            onChange={handleInputChange}
+            value={userData.email}
+            required
+          />
+          <FormInput
+            name="phoneNumber"
+            type="number"
+            placeholder="Contact Number"
+            onChange={handleInputChange}
+            value={userData.phoneNumber}
+            required
+          />
+          <FormInput
+            name="password"
+            type="password"
+            placeholder="Password"
+            onChange={handleInputChange}
+            value={userData.password}
+            required
+          />
           {/* <FormInput name="name" type="password" placeholder="Confirm Password" required /> */}
           <div className="terms-and-conditions">
             <FormInput type="checkbox" required /> I accept the Terms of Use &

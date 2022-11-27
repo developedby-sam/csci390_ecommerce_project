@@ -7,7 +7,7 @@ import "./header.styles.scss";
 import CartIcon from "../cart-icon/cart-icon.component";
 import CartDropdown from "../cart-dropdown/cart-dropdown.component";
 
-const Header = ({ hidden }) => {
+const Header = ({ hidden, user }) => {
   const pathname = useLocation().pathname;
   return (
     <div className="header">
@@ -26,9 +26,9 @@ const Header = ({ hidden }) => {
         </Link>
         <Link
           className={`${pathname == "/signin" ? "active" : ""} option`}
-          to="signin"
+          to={user.name.length ? "" : "/signin"}
         >
-          SIGN IN
+          {user.name.length ? `${user.name.toUpperCase()}` : "SIGN IN"}
         </Link>
         <CartIcon />
       </div>

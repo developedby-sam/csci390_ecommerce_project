@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 // components
 import Header from "./components/header/header.component";
@@ -9,14 +10,15 @@ import Signinpage from "./pages/siginpage/signinpage.component";
 import Footer from "./components/footer/footer.component";
 
 function App() {
+  const [user, setUser] = useState({ name: "", email: "" });
   return (
     <div>
-      <Header />
+      <Header user={user} />
       <Routes>
         <Route exact path="/" element={<Homepage />} />
         <Route path="/shop" element={<Shoppage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
-        <Route path="/register" element={<Registerpage />} />
+        <Route path="/register" element={<Registerpage setUser={setUser} />} />
         <Route path="/signin" element={<Signinpage />} />
       </Routes>
       <Footer />
