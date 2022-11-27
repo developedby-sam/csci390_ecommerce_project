@@ -18,7 +18,7 @@ const Registerpage = ({ setIsLogedin }) => {
     password: "",
   });
   const [userExist, setUserExist] = useState(false);
-
+  const [registerResponse, setRegisterResponse] = useState("")
   // Handles submission of the form data to the backend
   // COllectes user name and email and reset password to
   // prevents privacy issues
@@ -29,15 +29,18 @@ const Registerpage = ({ setIsLogedin }) => {
       method: "POST",
       body: JSON.stringify(userData),
       headers: { "Content-Type": "application/json" },
+    })
+    .then( (res) => res.json())
+    .then( (res) => {
+      if (res.status === 200) {
+        setUserExist(false);
+        setIsLogedin(true);
+        navigate("/");
+      } else if (res.status === 403) {
+        setUserExist(true);
+        setRegisterResponse(res.error);
+      }
     });
-
-    if (response.status === 200) {
-      setUserExist(false);
-      setIsLogedin(true);
-      navigate("/");
-    } else if (response.status === 403) {
-      setUserExist(true);
-    }
   };
 
   // Handles and update userform data
@@ -58,7 +61,7 @@ const Registerpage = ({ setIsLogedin }) => {
         </p>
         {userExist ? (
           <div className="duplicate">
-            Email already exists! Try using different email
+            {registerResponse}
           </div>
         ) : (
           ""

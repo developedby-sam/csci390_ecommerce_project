@@ -64,7 +64,8 @@ app.post("/register", async (req, res) => {
   ).length;
   if (userWithSameEmail) {
     return res.status(403).json({
-      error: `User with email: ${inputUserInfo.email} already exits.`,
+      status: 403,
+      error: `User ${inputUserInfo.email} exits. Try a different one.`,
     });
   } else {
     try {
@@ -97,9 +98,13 @@ app.post("/signin", async (req, res) => {
 
   if (userExist) {
     console.log("Yes");
-    return res.status(200).json({ message: "sign-in" });
+    return res.status(200).json({
+      status: 200,
+      message: "sign-in" });
   } else {
-    return res.status(400).json({ message: "Credential doesn't match!" });
+    return res.status(400).json({ 
+      status: 400,
+      message: "Credential doesn't match!" });
   }
 });
 

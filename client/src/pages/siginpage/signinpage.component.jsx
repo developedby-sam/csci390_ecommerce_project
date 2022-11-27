@@ -17,6 +17,7 @@ const Signinpage = ({ setIsLogedin }) => {
   // save user-data in state variable
   const [userData, setUserData] = useState(userInfo);
   const [wrongCredentials, setWrongCredentials] = useState(false);
+  const [signInResponse, setSignInResponse] = useState("")
 
   // Event handlers
   const handleInputChange = (event) => {
@@ -36,14 +37,17 @@ const Signinpage = ({ setIsLogedin }) => {
       method: "POST",
       body: JSON.stringify(userData),
       headers: { "Content-Type": "application/json" },
-    });
-
-    if (response.status === 200) {
-      setIsLogedin(true);
-      navigate("/");
-    } else if (response.status === 400) {
-      setWrongCredentials(true);
-    }
+    })
+    .then((res) => res.json())
+    .then( (res) => {
+      if (res.status === 200) {
+        setIsLogedin(true);
+        navigate("/");
+      } else if (res.status === 400) {
+        setWrongCredentials(true);
+        setSignInResponse(res.message)
+      }
+    });    
   };
 
   return (
@@ -53,7 +57,7 @@ const Signinpage = ({ setIsLogedin }) => {
         <p className="sub-heading">Sign in to your account.</p>
         {wrongCredentials ? (
           <div className="alert-error">
-            Email already exists! Try using different email
+            {signInResponse}
           </div>
         ) : (
           ""
