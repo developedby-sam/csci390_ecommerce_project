@@ -30,6 +30,17 @@ const Registerpage = ({ setIsLogedin }) => {
       method: "POST",
       body: JSON.stringify(userData),
       headers: { "Content-Type": "application/json" },
+    })
+    .then( (res) => res.json())
+    .then( (res) => {
+      if (res.status === 200) {
+        setUserExist(false);
+        setIsLogedin(true);
+        navigate("/");
+      } else if (res.status === 403) {
+        setUserExist(true);
+        setRegisterResponse(res.error);
+      }
     });
     const data = await response.json();
 
