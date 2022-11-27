@@ -10,16 +10,22 @@ import Signinpage from "./pages/siginpage/signinpage.component";
 import Footer from "./components/footer/footer.component";
 
 function App() {
-  const [user, setUser] = useState({ name: "", email: "" });
+  const [isLogedin, setIsLogedin] = useState(false);
   return (
     <div>
-      <Header user={user} />
+      <Header isLogedin={isLogedin} setIsLogedin={setIsLogedin} />
       <Routes>
         <Route exact path="/" element={<Homepage />} />
         <Route path="/shop" element={<Shoppage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
-        <Route path="/register" element={<Registerpage setUser={setUser} />} />
-        <Route path="/signin" element={<Signinpage />} />
+        <Route
+          path="/register"
+          element={<Registerpage setIsLogedin={setIsLogedin} />}
+        />
+        <Route
+          path="/signin"
+          element={<Signinpage setIsLogedin={setIsLogedin} />}
+        />
       </Routes>
       <Footer />
     </div>

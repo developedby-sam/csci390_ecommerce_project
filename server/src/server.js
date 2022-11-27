@@ -68,7 +68,6 @@ app.post("/register", async (req, res) => {
     });
   } else {
     try {
-      console.log("User Info:", inputUserInfo);
       let user = new UserModel(inputUserInfo);
       console.log(user);
       user = user.save();
@@ -81,6 +80,26 @@ app.post("/register", async (req, res) => {
         status: 400,
       });
     }
+  }
+});
+
+// User signin
+app.post("/signin", async (req, res) => {
+  const userToFind = req.body;
+  const users = await UserModel.find();
+
+  const userExist = users.filter(
+    (user) =>
+      user.email === userToFind.email && user.password === userToFind.password
+  ).length;
+
+  console.log(userExist);
+
+  if (userExist) {
+    console.log("Yes");
+    return res.status(200).json({ message: "sign-in" });
+  } else {
+    return res.status(400).json({ message: "Credential doesn't match!" });
   }
 });
 

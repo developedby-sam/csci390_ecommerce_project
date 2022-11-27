@@ -6,7 +6,7 @@ import "./registerpage.styles.scss";
 import FormInput from "../../components/form-input/form-input.component";
 import CustomButton from "../../components/custom-button/custom-button.component";
 
-const Registerpage = ({ setUser }) => {
+const Registerpage = ({ setIsLogedin }) => {
   const navigate = useNavigate();
 
   // Storing user data in state to keep track of if
@@ -33,10 +33,7 @@ const Registerpage = ({ setUser }) => {
 
     if (response.status === 200) {
       setUserExist(false);
-      setUser({
-        name: userData.name,
-        email: userData.email,
-      });
+      setIsLogedin(true);
       navigate("/");
     } else if (response.status === 403) {
       setUserExist(true);

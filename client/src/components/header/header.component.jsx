@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 
 // components and stylings
@@ -7,8 +7,19 @@ import "./header.styles.scss";
 import CartIcon from "../cart-icon/cart-icon.component";
 import CartDropdown from "../cart-dropdown/cart-dropdown.component";
 
-const Header = ({ hidden, user }) => {
+const Header = ({ hidden, isLogedin, setIsLogedin }) => {
   const pathname = useLocation().pathname;
+  const navigate = useNavigate();
+
+  const handleClick = (event) => {
+    event.preventDefault();
+    if (isLogedin) {
+      setIsLogedin(false);
+    } else {
+      navigate("/signin");
+    }
+  };
+
   return (
     <div className="header">
       <Link to="/">
@@ -26,9 +37,10 @@ const Header = ({ hidden, user }) => {
         </Link>
         <Link
           className={`${pathname == "/signin" ? "active" : ""} option`}
-          to={user.name.length ? "" : "/signin"}
+          to=""
+          onClick={handleClick}
         >
-          {user.name.length ? `${user.name.toUpperCase()}` : "SIGN IN"}
+          {isLogedin ? `SIGN OUT` : "SIGN IN"}
         </Link>
         <CartIcon />
       </div>
