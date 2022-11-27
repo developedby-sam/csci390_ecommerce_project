@@ -17,6 +17,7 @@ const Signinpage = ({ setIsLogedin }) => {
   // save user-data in state variable
   const [userData, setUserData] = useState(userInfo);
   const [wrongCredentials, setWrongCredentials] = useState(false);
+  const [message, setMessage] = useState("");
 
   // Event handlers
   const handleInputChange = (event) => {
@@ -37,27 +38,24 @@ const Signinpage = ({ setIsLogedin }) => {
       body: JSON.stringify(userData),
       headers: { "Content-Type": "application/json" },
     });
+    const data = await response.json();
+    console.log(data);
 
-    if (response.status === 200) {
+    if (data.status === 200) {
       setIsLogedin(true);
       navigate("/");
-    } else if (response.status === 400) {
+    } else if (data.status === 400) {
       setWrongCredentials(true);
+      setMessage(data.message);
     }
   };
 
   return (
     <div className="signin-page">
-      <form className="signin-form" action="#" method="#">
+      <form className="signin-form" onSubmit={handleSubmit}>
         <h3 className="heading">Sign In</h3>
         <p className="sub-heading">Sign in to your account.</p>
-        {wrongCredentials ? (
-          <div className="alert-error">
-            Email already exists! Try using different email
-          </div>
-        ) : (
-          ""
-        )}
+        {wrongCredentials ? <div className="alert-error">{message}</div> : ""}
         <div className="form-data">
           <FormInput
             name="email"
@@ -77,7 +75,7 @@ const Signinpage = ({ setIsLogedin }) => {
           />
         </div>
         <div className="btn-container">
-          <CustomButton onClick={handleSubmit}>SIGN IN</CustomButton>
+          <CustomButton type="submit">SIGN IN</CustomButton>
           <p>
             If you don't have an account <Link to="/register">register</Link>
           </p>

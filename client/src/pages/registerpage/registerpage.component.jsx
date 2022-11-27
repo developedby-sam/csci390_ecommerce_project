@@ -18,6 +18,7 @@ const Registerpage = ({ setIsLogedin }) => {
     password: "",
   });
   const [userExist, setUserExist] = useState(false);
+  const [message, setMessage] = useState("");
 
   // Handles submission of the form data to the backend
   // COllectes user name and email and reset password to
@@ -30,13 +31,15 @@ const Registerpage = ({ setIsLogedin }) => {
       body: JSON.stringify(userData),
       headers: { "Content-Type": "application/json" },
     });
+    const data = await response.json();
 
-    if (response.status === 200) {
+    if (data.status === 200) {
+      navigate("/");
       setUserExist(false);
       setIsLogedin(true);
-      navigate("/");
-    } else if (response.status === 403) {
+    } else if (data.status === 403) {
       setUserExist(true);
+      setMessage(data.message);
     }
   };
 
@@ -56,13 +59,7 @@ const Registerpage = ({ setIsLogedin }) => {
         <p className="sub-heading">
           Create your account. It's free and only takes a minute.
         </p>
-        {userExist ? (
-          <div className="duplicate">
-            Email already exists! Try using different email
-          </div>
-        ) : (
-          ""
-        )}
+        {userExist ? <div className="duplicate">{message}</div> : ""}
         <div className="form-data">
           <FormInput
             name="name"
