@@ -17,7 +17,7 @@ const Signinpage = ({ setIsLogedin }) => {
   // save user-data in state variable
   const [userData, setUserData] = useState(userInfo);
   const [wrongCredentials, setWrongCredentials] = useState(false);
-  const [signInResponse, setSignInResponse] = useState("")
+  const [message, setMessage] = useState("");
 
   // Event handlers
   const handleInputChange = (event) => {
@@ -37,31 +37,25 @@ const Signinpage = ({ setIsLogedin }) => {
       method: "POST",
       body: JSON.stringify(userData),
       headers: { "Content-Type": "application/json" },
-    })
-    .then((res) => res.json())
-    .then( (res) => {
-      if (res.status === 200) {
-        setIsLogedin(true);
-        navigate("/");
-      } else if (res.status === 400) {
-        setWrongCredentials(true);
-        setSignInResponse(res.message)
-      }
-    });    
+    });
+    const data = await response.json();
+    console.log(data);
+
+    if (data.status === 200) {
+      setIsLogedin(true);
+      navigate("/");
+    } else if (data.status === 400) {
+      setWrongCredentials(true);
+      setMessage(data.message);
+    }
   };
 
   return (
     <div className="signin-page">
-      <form className="signin-form" action="#" method="#">
+      <form className="signin-form" onSubmit={handleSubmit}>
         <h3 className="heading">Sign In</h3>
         <p className="sub-heading">Sign in to your account.</p>
-        {wrongCredentials ? (
-          <div className="alert-error">
-            {signInResponse}
-          </div>
-        ) : (
-          ""
-        )}
+        {wrongCredentials ? <div className="alert-error">{message}</div> : ""}
         <div className="form-data">
           <FormInput
             name="email"
@@ -81,7 +75,7 @@ const Signinpage = ({ setIsLogedin }) => {
           />
         </div>
         <div className="btn-container">
-          <CustomButton onClick={handleSubmit}>SIGN IN</CustomButton>
+          <CustomButton type="submit">SIGN IN</CustomButton>
           <p>
             If you don't have an account <Link to="/register">register</Link>
           </p>

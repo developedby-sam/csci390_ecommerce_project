@@ -58,23 +58,21 @@ app.post("/register", async (req, res) => {
   const inputUserInfo = req.body;
 
   let users = await UserModel.find();
-  console.log(users);
   const userWithSameEmail = users.filter(
     (user) => user.email === inputUserInfo.email
-  ).length;
-  if (userWithSameEmail) {
+  );
+  if (userWithSameEmail.length) {
     return res.status(403).json({
       status: 403,
-      error: `User ${inputUserInfo.email} exits. Try a different one.`,
+      message: `Email already exits. Try using different email`,
     });
   } else {
     try {
       let user = new UserModel(inputUserInfo);
-      console.log(user);
       user = user.save();
       return res.status(200).json({
         status: 200,
-        data: user,
+        data: { name: inputUserInfo.name, email: inputUserInfo.email },
       });
     } catch {
       return res.status(400).json({
@@ -89,22 +87,22 @@ app.post("/signin", async (req, res) => {
   const userToFind = req.body;
   const users = await UserModel.find();
 
-  const userExist = users.filter(
+  const existingUser = users.filter(
     (user) =>
       user.email === userToFind.email && user.password === userToFind.password
-  ).length;
+  );
 
-  console.log(userExist);
-
-  if (userExist) {
-    console.log("Yes");
+  if (existingUser.length) {
+    const userData = existingUser[0];
     return res.status(200).json({
       status: 200,
-      message: "sign-in" });
+      message: "successfully signed in.",
+      data: { name: userData.name, email: userData.email },
+    });
   } else {
-    return res.status(400).json({ 
-      status: 400,
-      message: "Credential doesn't match!" });
+    return res
+      .status(400)
+      .json({ status: 400, message: "Email and password does not match." });
   }
 });
 

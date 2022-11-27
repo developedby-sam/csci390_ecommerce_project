@@ -18,7 +18,8 @@ const Registerpage = ({ setIsLogedin }) => {
     password: "",
   });
   const [userExist, setUserExist] = useState(false);
-  const [registerResponse, setRegisterResponse] = useState("")
+  const [message, setMessage] = useState("");
+
   // Handles submission of the form data to the backend
   // COllectes user name and email and reset password to
   // prevents privacy issues
@@ -41,6 +42,16 @@ const Registerpage = ({ setIsLogedin }) => {
         setRegisterResponse(res.error);
       }
     });
+    const data = await response.json();
+
+    if (data.status === 200) {
+      navigate("/");
+      setUserExist(false);
+      setIsLogedin(true);
+    } else if (data.status === 403) {
+      setUserExist(true);
+      setMessage(data.message);
+    }
   };
 
   // Handles and update userform data
@@ -59,13 +70,7 @@ const Registerpage = ({ setIsLogedin }) => {
         <p className="sub-heading">
           Create your account. It's free and only takes a minute.
         </p>
-        {userExist ? (
-          <div className="duplicate">
-            {registerResponse}
-          </div>
-        ) : (
-          ""
-        )}
+        {userExist ? <div className="duplicate">{message}</div> : ""}
         <div className="form-data">
           <FormInput
             name="name"
