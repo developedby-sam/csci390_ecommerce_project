@@ -1,14 +1,30 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
 // components
 import "./product-item.styles.scss";
 import CustomButton from "../custom-button/custom-button.component";
 import { addItem, showCart } from "../../redux/cart/cart.actions";
+import { selectCartItems } from "../../redux/cart/cart.selectors";
 
-const ProductItem = ({ item, addItem, showCart }) => {
+const ProductItem = ({ item, addItem, user, cartItems }) => {
   const { name, price, image, stock, category } = item;
   const imageUrl = `https://electronic-ecommerce.herokuapp.com/${image}`;
+
+  const handleAddToCart = async () => {
+    const cartData = {
+      _id: user._id,
+      cart: cartItems,
+    };
+
+    const response = await fetch("http://localhost:8001/api/cart/addToCart", {
+      method: "POST",
+      body: JSON.stringify(cartData),
+      headers: { "Content-Type": "application/json" },
+    });
+    const data = await response.json();
+    console.log(data);
+  };
 
   return (
     <div className="product-item">
@@ -32,7 +48,7 @@ const ProductItem = ({ item, addItem, showCart }) => {
       <CustomButton
         onClick={() => {
           addItem(item);
-          showCart();
+          handleAddToCart();
         }}
       >
         ADD TO CART
@@ -41,9 +57,13 @@ const ProductItem = ({ item, addItem, showCart }) => {
   );
 };
 
+const mapStateToProps = (state) => ({
+  cartItems: selectCartItems(state),
+});
+
 const mapDispatchToProps = (dispatch) => ({
   addItem: (item) => dispatch(addItem(item)),
   showCart: () => dispatch(showCart()),
 });
 
-export default connect(null, mapDispatchToProps)(ProductItem);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductItem);

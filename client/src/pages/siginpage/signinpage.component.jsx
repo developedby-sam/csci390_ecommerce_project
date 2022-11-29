@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { connect } from "react-redux";
 
 import "./signinpage.styles.scss";
 
 // Components
 import FormInput from "../../components/form-input/form-input.component";
 import CustomButton from "../../components/custom-button/custom-button.component";
+import { addItem, showCart } from "../../redux/cart/cart.actions";
+import { selectCartItems } from "../../redux/cart/cart.selectors";
 
-const Signinpage = ({ setIsLogedin }) => {
+const Signinpage = ({ setIsLogedin, setUser, addItem, cartItems }) => {
   const navigate = useNavigate();
   const userInfo = {
     email: "",
@@ -33,18 +36,37 @@ const Signinpage = ({ setIsLogedin }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const response = await fetch("http://localhost:8000/signin", {
+    const response = await fetch("http://localhost:8001/api/users/signin", {
       method: "POST",
       body: JSON.stringify(userData),
       headers: { "Content-Type": "application/json" },
     });
     const data = await response.json();
-    console.log(data);
+    setUser(data);
 
     if (data.status === 200) {
       setIsLogedin(true);
+
+      // fetch cart
+      const response = await fetch(
+        `http://localhost:8001/api/cart/${data._id}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      const cartData = await response.json();
+
+      if (cartData.status === 200) {
+        const cart = cartData.cart.cart;
+        cart.map((item) => {
+          for (let i = 1; i <= item.quantity; i++) {
+            addItem(item);
+          }
+        });
+      }
       navigate("/");
-    } else if (data.status === 400) {
+    } else if (data.status === 401) {
       setWrongCredentials(true);
       setMessage(data.message);
     }
@@ -85,4 +107,13 @@ const Signinpage = ({ setIsLogedin }) => {
   );
 };
 
-export default Signinpage;
+const mapStateToProps = (state) => ({
+  cartItems: selectCartItems(state),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  addItem: (item) => dispatch(addItem(item)),
+  showCart: () => dispatch(showCart()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signinpage);

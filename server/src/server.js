@@ -106,4 +106,39 @@ app.post("/signin", async (req, res) => {
   }
 });
 
+// Database Schema for Cart
+const cartSchema = new Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+    },
+    products: [
+      {
+        productId: String,
+        name: String,
+        imageUrl: String,
+        price: String,
+        stock: Number,
+        category: [String],
+        createAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+    modifiedOn: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  { timestamps: true }
+);
+
+const cartModel = mongoose.model("cart", cartSchema);
+
+app.post("/addToCart", async (req, res) => {
+  console.log(req.body);
+});
+
 app.listen(PORT);

@@ -3,7 +3,7 @@ import "./product-preview.styles.scss";
 
 import ProductItem from "../product-item/product-item.component";
 
-const ProductPreview = ({ searchValue }) => {
+const ProductPreview = ({ searchValue, user }) => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const ProductPreview = ({ searchValue }) => {
             product.category.includes(searchValue)
         )
         .map((item) => (
-          <ProductItem key={item.id} item={item} />
+          <ProductItem key={item.id} item={item} user={user} />
         ))}
     </div>
   );

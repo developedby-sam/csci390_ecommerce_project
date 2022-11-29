@@ -11,20 +11,23 @@ import Footer from "./components/footer/footer.component";
 
 function App() {
   const [isLogedin, setIsLogedin] = useState(false);
+  const [user, setUser] = useState({});
   return (
     <div>
       <Header isLogedin={isLogedin} setIsLogedin={setIsLogedin} />
       <Routes>
         <Route exact path="/" element={<Homepage />} />
-        <Route path="/shop" element={<Shoppage />} />
-        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/shop" element={<Shoppage user={user} />} />
+        <Route path="/checkout" element={<CheckoutPage user={user} />} />
         <Route
           path="/register"
-          element={<Registerpage setIsLogedin={setIsLogedin} />}
+          element={
+            <Registerpage setIsLogedin={setIsLogedin} setUser={setUser} />
+          }
         />
         <Route
           path="/signin"
-          element={<Signinpage setIsLogedin={setIsLogedin} />}
+          element={<Signinpage setIsLogedin={setIsLogedin} setUser={setUser} />}
         />
       </Routes>
       <Footer />

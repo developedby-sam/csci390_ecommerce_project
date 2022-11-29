@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/developedby-sam/everest-walk-frontend-assignment/issues"
   },
-  "homepage": "https://github.com/developedby-sam/everest-walk-frontend-assignment#readme"
+  "homepage": "https://github.com/developedby-sam/everest-walk-frontend-assignment#readme",
+  "dependencies": {
+    "cors": "^2.8.5"
+  }
 }

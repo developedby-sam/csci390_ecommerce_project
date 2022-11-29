@@ -6,7 +6,7 @@ import "./registerpage.styles.scss";
 import FormInput from "../../components/form-input/form-input.component";
 import CustomButton from "../../components/custom-button/custom-button.component";
 
-const Registerpage = ({ setIsLogedin }) => {
+const Registerpage = ({ setIsLogedin, setUser }) => {
   const navigate = useNavigate();
 
   // Storing user data in state to keep track of if
@@ -14,8 +14,8 @@ const Registerpage = ({ setIsLogedin }) => {
   const [userData, setUserData] = useState({
     name: "",
     email: "",
-    phoneNumber: "",
     password: "",
+    phone: "",
   });
   const [userExist, setUserExist] = useState(false);
   const [message, setMessage] = useState("");
@@ -26,7 +26,7 @@ const Registerpage = ({ setIsLogedin }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const response = await fetch("http://localhost:8000/register", {
+    const response = await fetch("http://localhost:8001/api/users/signup", {
       method: "POST",
       body: JSON.stringify(userData),
       headers: { "Content-Type": "application/json" },
@@ -43,6 +43,8 @@ const Registerpage = ({ setIsLogedin }) => {
       }
     });
     const data = await response.json();
+    setUser(data);
+    console.log(data);
 
     if (data.status === 200) {
       navigate("/");
@@ -89,19 +91,19 @@ const Registerpage = ({ setIsLogedin }) => {
             required
           />
           <FormInput
-            name="phoneNumber"
-            type="number"
-            placeholder="Contact Number"
-            onChange={handleInputChange}
-            value={userData.phoneNumber}
-            required
-          />
-          <FormInput
             name="password"
             type="password"
             placeholder="Password"
             onChange={handleInputChange}
             value={userData.password}
+            required
+          />
+          <FormInput
+            name="phone"
+            type="number"
+            placeholder="Contact Number"
+            onChange={handleInputChange}
+            value={userData.phone}
             required
           />
           {/* <FormInput name="name" type="password" placeholder="Confirm Password" required /> */}

@@ -4,7 +4,7 @@ import "./shoppage.styles.scss";
 import ProductPreview from "../../components/product-preview/product-preview.component";
 import FormInput from "../../components/form-input/form-input.component";
 
-const Shoppage = () => {
+const Shoppage = ({ user }) => {
   const [searchValue, setSearchValue] = useState("");
 
   const handleChange = function (event) {
@@ -20,7 +20,7 @@ const Shoppage = () => {
         placeholder="Search for products"
         onChange={handleChange}
       />
-      <ProductPreview searchValue={searchValue} />
+      <ProductPreview searchValue={searchValue} user={user} />
     </div>
   );
 };

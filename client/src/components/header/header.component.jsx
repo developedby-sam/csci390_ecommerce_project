@@ -6,8 +6,9 @@ import { connect } from "react-redux";
 import "./header.styles.scss";
 import CartIcon from "../cart-icon/cart-icon.component";
 import CartDropdown from "../cart-dropdown/cart-dropdown.component";
+import { clearCart } from "../../redux/cart/cart.actions";
 
-const Header = ({ hidden, isLogedin, setIsLogedin }) => {
+const Header = ({ hidden, isLogedin, setIsLogedin, clearCart }) => {
   const pathname = useLocation().pathname;
   const navigate = useNavigate();
 
@@ -15,6 +16,8 @@ const Header = ({ hidden, isLogedin, setIsLogedin }) => {
     event.preventDefault();
     if (isLogedin) {
       setIsLogedin(false);
+      clearCart();
+      navigate("/");
     } else {
       navigate("/signin");
     }
@@ -53,4 +56,8 @@ const mapStateToProps = ({ cart: { hidden } }) => ({
   hidden,
 });
 
-export default connect(mapStateToProps)(Header);
+const mapDispatchToProps = (dispatch) => ({
+  clearCart: () => dispatch(clearCart()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
