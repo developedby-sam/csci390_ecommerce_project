@@ -23,16 +23,16 @@ const ChechkoutItem = ({
 
   const handleAddToCart = async () => {
     console.log(cartItems);
-    // const cartData = {
-    //   _id: user._id,
-    //   cart: cartItems,
-    // };
+    const cartData = {
+      _id: user._id,
+      cart: cartItems,
+    };
 
-    // await fetch("http://localhost:8001/api/cart/addToCart", {
-    //   method: "POST",
-    //   body: JSON.stringify(cartData),
-    //   headers: { "Content-Type": "application/json" },
-    // });
+    await fetch("http://localhost:8001/api/cart/addToCart", {
+      method: "POST",
+      body: JSON.stringify(cartData),
+      headers: { "Content-Type": "application/json" },
+    });
   };
 
   return (
@@ -46,7 +46,7 @@ const ChechkoutItem = ({
           className="arrow"
           onClick={() => {
             removeItem(cartItem);
-            // handleAddToCart();
+            handleAddToCart();
           }}
         >
           &#10094;
@@ -67,7 +67,7 @@ const ChechkoutItem = ({
         className="remove-button"
         onClick={() => {
           clearItem(cartItem);
-          // handleAddToCart();
+          handleAddToCart();
         }}
       >
         &#10005;
