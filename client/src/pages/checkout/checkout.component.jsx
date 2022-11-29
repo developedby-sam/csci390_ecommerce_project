@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
-import StripeCheckout from "react-stripe-checkout";
+import StripeCheckoutButton from "../../components/stripe-button/stripe-button.component";
 
 // components and styles
 import "./checkout.styles.scss";
@@ -11,7 +11,6 @@ import {
   selectCartItemsCount,
 } from "../../redux/cart/cart.selectors";
 import ChechkoutItem from "../../components/checkout-item/checkout-item.component";
-import FormInput from "../../components/form-input/form-input.component";
 
 const CheckoutPage = ({ cartItems, total, itemCount, user }) => {
   return (
@@ -40,25 +39,7 @@ const CheckoutPage = ({ cartItems, total, itemCount, user }) => {
         <div className="total">Quantity: {itemCount}</div>
         <div className="total">Total: ${total}</div>
       </div>
-      <form className="checkout-form">
-        <FormInput type="text" placeholder="Full Name" />
-        <FormInput type="email" placeholder="Email" />
-        <FormInput type="text" placeholder="Billing Address" />
-        <FormInput type="text" placeholder="Delivery Address" />
-        <FormInput type="tel" placeholder="Telephone Number" />
-        <FormInput type="date" placeholder="Date" />
-        {/* <CustomButton>CHECKOUT</CustomButton> */}
-        <StripeCheckout
-          stripeKey="pk_test_51M9FlNEXNedc5Hg4FwPGpd9fA602yszsQMFO9pqyfYzc5ah74FBspvCftwpo3wGvGcoYjGzNUAD7GnaM7ErxL38f00NeFa2RrN"
-          label="Pay Now"
-          name="EW Ltd."
-          billingAddress
-          shippingAddress
-          amount={200}
-          description={`Your total is`}
-          // token={"hello"}
-        />
-      </form>
+      <StripeCheckoutButton price={total} />
     </div>
   );
 };
